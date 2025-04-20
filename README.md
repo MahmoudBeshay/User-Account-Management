@@ -1,114 +1,79 @@
-# 👤 User Account Management with Bash
+User Account Management System
+A Bash script-based solution for automating user account creation and management on Linux systems. This project simplifies the process of adding users with secure, randomly generated passwords and tracks user information in CSV files.
 
-This project contains two simple yet powerful Bash scripts for managing Linux user accounts in bulk using a CSV file.
+Features
+Interactive User Input: Collects username and full name via command-line prompts.
 
-## 📜 Description
+CSV Data Storage: Stores user details in employee.csv for batch processing.
 
-- `add_user.sh`: Collects a username and full name from the user and appends it to a CSV file.
-- `create_users.sh`: Reads from the CSV, generates a secure password for each user, creates a Linux user account, and stores the credentials in another CSV file.
+Secure Password Generation: Creates strong 12-character base64-encoded passwords using OpenSSL.
 
----
+Automated User Creation: Bulk-creates user accounts from CSV data with forced password reset on first login.
 
-## 📁 Project Structure
+Audit Trail: Generates info.csv containing usernames, full names, and initial passwords.
 
-user-account-management/ ├── add_user.sh # Script to collect and store user info ├── create_users.sh # Script to create users from CSV ├── employee.csv # Input file with username and full name ├── info.csv # Output file with username, full name, and generated password └── README.md # Project documentation
+Prerequisites
+Linux-based operating system
 
-yaml
-Copy
-Edit
+Bash shell
 
----
+OpenSSL (for password generation)
 
-## 🛠️ Requirements
+Root/sudo privileges (required for user account creation)
 
-- Linux OS
-- Bash shell
-- `openssl` installed
-- Sudo privileges for account creation
+Installation
+Clone or download the scripts to your local machine.
 
----
-
-## 🚀 How to Use
-
-### Step 1: Make Scripts Executable
-
-```bash
-chmod +x add_user.sh create_users.sh
-Step 2: Add User Info
-Run this to add a user entry to employee.csv:
+Make the scripts executable:
 
 bash
-Copy
-Edit
-./add_user.sh
-You will be prompted to enter:
+chmod +x user_management.sh create_users.sh
+Usage
+Step 1: Add User Information
+Run the user management script to add new users:
+
+bash
+./user_management.sh
+Follow prompts to enter:
 
 Username
 
 Full name
 
-Confirmation before saving
+Confirmation (y/n)
 
-Step 3: Create Users
-Run this to create all users listed in employee.csv:
+This appends data to employee.csv.
+
+Step 2: Create User Accounts
+Process the CSV file to create user accounts:
 
 bash
-Copy
-Edit
-./create_users.sh
-It will:
+sudo ./create_users.sh
+Note: Requires administrative privileges.
 
-Generate a random secure password for each user
-
-Create the user with the full name as a comment
-
-Set the password to expire on first login
-
-Save all credentials to info.csv
-
-✅ Example
+Output Files
 employee.csv
+Format: username,fullname
+Stores basic user information for account creation.
 
-Copy
-Edit
-jdoe,John Doe
-asmith,Alice Smith
 info.csv
+Format: username,fullname,password
+Contains initial passwords for audit purposes. Secure this file!
 
-Copy
-Edit
-jdoe,John Doe,sX5vTrfP9oZw
-asmith,Alice Smith,jK9vQpLs2wMn
-🔐 Security Note
-Passwords are generated using:
+Security Considerations
+🔒 Passwords in info.csv are stored in plaintext - restrict access
 
-bash
-Copy
-Edit
-openssl rand -base64 12
-Always handle info.csv securely since it contains plaintext credentials.
+🔄 Users are forced to change password on first login (chage -d 0)
 
-🤝 Contribution
-Feel free to fork the repo and submit pull requests to improve the scripts (e.g., input validation, error handling, encryption, logging, etc.).
+🗑️ Remove info.csv after distributing passwords to users
 
-📄 License
-This project is licensed under the MIT License.
+Important Notes
+The script includes a UID check that may prevent execution as root. If encountering permission issues:
 
-📬 Contact
-Author: Mahmoud Ali Beshay
-GitHub: @MahmoudBeshay
+Verify script is being run with appropriate privileges
 
-yaml
-Copy
-Edit
+Check line 2 in create_users.sh for proper UID validation
 
----
+Tested on Ubuntu/Debian systems - may require adjustments for other distributions
 
-Let me know if you want help turning this into a GitHub Pages project or adding badges like `Made with Bash`, `MIT License`, etc.
-
-
-
-
-
-
-
+Always review generated CSV files before running account creation
